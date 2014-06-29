@@ -14,7 +14,7 @@ public class Info extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.infoview);
 
-        TextView t = (TextView)findViewById(R.id.textView2);
+        TextView t = (TextView) findViewById(R.id.textView2);
         t.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

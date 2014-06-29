@@ -39,7 +39,7 @@ public class Main extends Activity {
         c = this;
 
         // set event handler
-        final ListView lv = (ListView)findViewById(R.id.listView1);
+        final ListView lv = (ListView) findViewById(R.id.listView1);
         lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -52,7 +52,7 @@ public class Main extends Activity {
         });
 
         Button b;
-        b = (Button)findViewById(R.id.btnrandom);
+        b = (Button) findViewById(R.id.btnrandom);
         b.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +71,7 @@ public class Main extends Activity {
             }
         });
 
-        b = (Button)findViewById(R.id.btnsearch);
+        b = (Button) findViewById(R.id.btnsearch);
         b.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +86,7 @@ public class Main extends Activity {
                     }
                 };
 
-                TextView tv = (TextView)findViewById(R.id.search);
+                TextView tv = (TextView) findViewById(R.id.search);
                 String search = tv.getText().toString();
                 if (search.length() > 0) {
                     BGMStoreQuery.q = search;
@@ -95,7 +95,7 @@ public class Main extends Activity {
             }
         });
 
-        b = (Button)findViewById(R.id.btnrecent);
+        b = (Button) findViewById(R.id.btnrecent);
         b.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,10 +121,10 @@ public class Main extends Activity {
             audioStreamer.interrupt();
         }
 
-        final SeekBar seekbar = (SeekBar)findViewById(R.id.seekbar);
-        final TextView textStreamed = (TextView)findViewById(R.id.nowplaying);
-        final Button playButton = (Button)findViewById(R.id.button_play);
-        final Button downButton = (Button)findViewById(R.id.button_down);
+        final SeekBar seekbar = (SeekBar) findViewById(R.id.seekbar);
+        final TextView textStreamed = (TextView) findViewById(R.id.nowplaying);
+        final Button playButton = (Button) findViewById(R.id.button_play);
+        final Button downButton = (Button) findViewById(R.id.button_down);
 
         textStreamed.setText(ndata.title);
         downButton.setEnabled(false);
@@ -133,7 +133,7 @@ public class Main extends Activity {
             @Override
             public void onClick(View v) {
                 String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
-                String mp3name = ndata.url.substring(ndata.url.indexOf("mp3/")+4);
+                String mp3name = ndata.url.substring(ndata.url.indexOf("mp3/") + 4);
                 mp3name = URLDecoder.decode(mp3name);
                 path += "/" + mp3name + ".mp3";
 
@@ -145,7 +145,7 @@ public class Main extends Activity {
         seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                audioStreamer.setSeek((double)seekBar.getProgress() / 100.0);
+                audioStreamer.setSeek((double) seekBar.getProgress() / 100.0);
             }
 
             @Override
@@ -164,7 +164,7 @@ public class Main extends Activity {
                 public void dispatchMessage(Message msg) {
                     switch (msg.what) {
                     case StreamingMediaPlayer.MSG_PLAYING:
-                        seekbar.setProgress((Integer)msg.obj);
+                        seekbar.setProgress((Integer) msg.obj);
                         break;
                     case StreamingMediaPlayer.MSG_READY:
                         break;

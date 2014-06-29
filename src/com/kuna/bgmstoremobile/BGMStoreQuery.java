@@ -15,8 +15,8 @@ public class BGMStoreQuery {
                 + "&q_type=" + q_type
                 + "&sort_by=" + sort_by
                 + "&sort_type=" + sort_type
-                + "&member_num=" + ((member_num>=0)?Integer.toString(member_num):"")
+                + "&member_num=" + ((member_num >= 0) ? Integer.toString(member_num) : "")
                 + "&q_mode=" + q_mode;
-        return r;//URLEncoder.encode(r);
+        return r; //URLEncoder.encode(r);
     }
 }

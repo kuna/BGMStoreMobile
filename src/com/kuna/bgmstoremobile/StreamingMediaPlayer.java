@@ -27,7 +27,7 @@ public class StreamingMediaPlayer {
     public static final int MSG_DOWNLOADED = 4;
     public static final int MSG_INTERRUPTED = 5;
 
-    private static final int INTIAL_KB_BUFFER = 96*10/8;//assume 96kbps*10secs/8bits per byte
+    private static final int INTIAL_KB_BUFFER = 96 * 10 / 8; // assume 96kbps * 10secs / 8bits per byte
 
     private Handler h;
 
@@ -90,7 +90,7 @@ public class StreamingMediaPlayer {
         }
 
         // 캐시 폴더 만들고 .dat파일 생성
-        downloadingMediaFile = new File(context.getCacheDir(),"downloadingMedia.dat");
+        downloadingMediaFile = new File(context.getCacheDir(), "downloadingMedia.dat");
 
         // 같은 경로에 파일이 존재 하면 그 파일 삭제함.. 캐시메모리 때문
         if (downloadingMediaFile.exists()) {
@@ -110,7 +110,7 @@ public class StreamingMediaPlayer {
             out.write(buf, 0, numread);
             totalBytesRead += numread;
             incrementalBytesRead += numread;
-            totalKbRead = totalBytesRead/1000;
+            totalKbRead = totalBytesRead / 1000;
 
             testMediaBuffer();
             fireDataLoadUpdate();
@@ -151,7 +151,7 @@ public class StreamingMediaPlayer {
                             Log.e(getClass().getName(), "Error copying buffered conent.", e);
                         }
                     }
-                } else if ( mediaPlayer.getDuration() - mediaPlayer.getCurrentPosition() <= 1000 ){
+                } else if ( mediaPlayer.getDuration() - mediaPlayer.getCurrentPosition() <= 1000 ) {
                     // NOTE: The media player has stopped at the end so transfer any existing buffered data
                     // We test for < 1second of data because the media player can stop when there is still
                     // a few milliseconds of data left to play
@@ -165,7 +165,7 @@ public class StreamingMediaPlayer {
 
     private void startMediaPlayer() {
         try {
-            File bufferedFile = new File(context.getCacheDir(),"playingMedia" + (counter++) + ".dat");
+            File bufferedFile = new File(context.getCacheDir(), "playingMedia" + (counter++) + ".dat");
 
             // We double buffer the data to avoid potential read/write errors that could happen if the
             // download thread attempted to write at the same time the MediaPlayer was trying to read.
@@ -173,10 +173,10 @@ public class StreamingMediaPlayer {
             // the media is playing. This would permanently deadlock the file download. To avoid such a deadloack,
             // we move the currently loaded data to a temporary buffer file that we start playing while the remaining
             // data downloads.
-            moveFile(downloadingMediaFile,bufferedFile);
+            moveFile(downloadingMediaFile, bufferedFile);
 
-            Log.e(getClass().getName(),"Buffered File path: " + bufferedFile.getAbsolutePath());
-            Log.e(getClass().getName(),"Buffered File length: " + bufferedFile.length()+"");
+            Log.e(getClass().getName(), "Buffered File path: " + bufferedFile.getAbsolutePath());
+            Log.e(getClass().getName(), "Buffered File length: " + bufferedFile.length() + "");
 
             mediaPlayer = createMediaPlayer(bufferedFile);
             // 음악 파일 생성 후 재생
@@ -197,7 +197,7 @@ public class StreamingMediaPlayer {
         mPlayer.setOnErrorListener(
                 new MediaPlayer.OnErrorListener() {
                     public boolean onError(MediaPlayer mp, int what, int extra) {
-                        Log.e(getClass().getName(), "Error in MediaPlayer: (" + what +") with extra (" +extra +")" );
+                        Log.e(getClass().getName(), "Error in MediaPlayer: (" + what + ") with extra (" + extra + ")");
                         return false;
                     }
                 });
@@ -224,8 +224,8 @@ public class StreamingMediaPlayer {
             int curPosition = mediaPlayer.getCurrentPosition();
 
             // Copy the currently downloaded content to a new buffered File. Store the old File for deleting later.
-            File oldBufferedFile = new File(context.getCacheDir(),"playingMedia" + counter + ".dat");
-            File bufferedFile = new File(context.getCacheDir(),"playingMedia" + (counter++) + ".dat");
+            File oldBufferedFile = new File(context.getCacheDir(), "playingMedia" + counter + ".dat");
+            File bufferedFile = new File(context.getCacheDir(), "playingMedia" + (counter++) + ".dat");
 
             // This may be the last buffered File so ask that it be delete on exit. If it's already deleted, then this won't mean anything. If you want to
             // keep and track fully downloaded files for later use, write caching code and please send me a copy.
@@ -244,14 +244,14 @@ public class StreamingMediaPlayer {
             // NOTE: We test for < 1second of data because the media player can stop when there is still
             // a few milliseconds of data left to play
             boolean atEndOfFile = mediaPlayer.getDuration() - mediaPlayer.getCurrentPosition() <= 1000;
-            if (wasPlaying || atEndOfFile){
+            if (wasPlaying || atEndOfFile) {
                 mediaPlayer.start();
             }
 
             // Lastly delete the previously playing buffered File as it's no longer needed.
             oldBufferedFile.delete();
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             Log.e(getClass().getName(), "Error updating to newly loaded content.", e);
         }
     }
@@ -259,7 +259,7 @@ public class StreamingMediaPlayer {
     private void fireDataLoadUpdate() {
         Runnable updater = new Runnable() {
             public void run() {
-                h.obtainMessage(MSG_PROGRESS, (int)totalKbRead).sendToTarget();
+                h.obtainMessage(MSG_PROGRESS, (int) totalKbRead).sendToTarget();
             }
         };
         handler.post(updater);
@@ -287,8 +287,8 @@ public class StreamingMediaPlayer {
     public void startPlayProgressUpdater() {
         mediaLengthInSeconds = mediaPlayer.getDuration();
         //Log.i("DURATION", Integer.toString(mediaPlayer.getDuration()));
-        float progress = ((float)mediaPlayer.getCurrentPosition()/mediaLengthInSeconds);
-        h.obtainMessage(MSG_PLAYING, (int)(progress*100)).sendToTarget();
+        float progress = ((float) mediaPlayer.getCurrentPosition() / mediaLengthInSeconds);
+        h.obtainMessage(MSG_PLAYING, (int) (progress * 100)).sendToTarget();
 
         if (mediaPlayer.isPlaying()) {
             Runnable notification = new Runnable() {
@@ -296,7 +296,7 @@ public class StreamingMediaPlayer {
                     startPlayProgressUpdater();
                 }
             };
-            handler.postDelayed(notification,1000);
+            handler.postDelayed(notification, 1000);
         }
     }
 
@@ -321,15 +321,15 @@ public class StreamingMediaPlayer {
                 while ( (numChars = reader.read( buff, 0, buff.length ) ) != -1) {
                     writer.write( buff, 0, numChars );
                 }
-            } catch( IOException ex ) {
+            } catch ( IOException ex ) {
                 throw new IOException("IOException when transferring " + oldLocation.getPath() + " to " + newLocation.getPath());
             } finally {
                 try {
-                    if ( reader != null ){
+                    if ( reader != null ) {
                         writer.close();
                         reader.close();
                     }
-                } catch( IOException ex ){
+                } catch( IOException ex ) {
                     Log.e(getClass().getName(),"Error closing files when transferring " + oldLocation.getPath() + " to " + newLocation.getPath() );
                 }
             }
@@ -339,7 +339,7 @@ public class StreamingMediaPlayer {
     }
 
     public void setSeek(double percent) {
-        mediaPlayer.seekTo((int)(mediaLengthInSeconds * percent));
+        mediaPlayer.seekTo((int) (mediaLengthInSeconds * percent));
     }
 
     public void setLoop(boolean loop) {
@@ -359,7 +359,7 @@ public class StreamingMediaPlayer {
         }
 
         try {
-            File src = new File(context.getCacheDir(),"downloadingMedia.dat");
+            File src = new File(mContext.getCacheDir(), "downloadingMedia.dat");
             FileInputStream inStream = new FileInputStream(src);
             FileOutputStream outStream = new FileOutputStream(toPath);
             FileChannel inChannel = inStream.getChannel();

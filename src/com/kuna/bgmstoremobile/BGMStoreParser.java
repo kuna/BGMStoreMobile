@@ -133,7 +133,7 @@ public class BGMStoreParser {
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);
 
-                //add request header
+                // add request header
                 conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36");
                 conn.setRequestProperty("X-Requested-With", "XMLHttpRequest");
 
@@ -166,8 +166,8 @@ public class BGMStoreParser {
         try {
             JSONParser parser = new JSONParser();
             JSONObject jobj = (JSONObject) parser.parse(doc);
-            String html_data = StringEscapeUtils.unescapeJava((String)jobj.get("html_data"));
-            //int result_count = Integer.parseInt((String) jobj.get("result_count"));
+            String html_data = StringEscapeUtils.unescapeJava((String) jobj.get("html_data"));
+            // int result_count = Integer.parseInt((String) jobj.get("result_count"));
 
             return html_data;
         } catch (Exception ex) {
