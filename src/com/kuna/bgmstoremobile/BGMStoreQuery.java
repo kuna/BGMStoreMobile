@@ -1,13 +1,17 @@
 package com.kuna.bgmstoremobile;
 
 public class BGMStoreQuery {
-    public static int sLimitCount = 0;
-    public static String sKeyword = "";
-    public static String sKeywordType = "title";
-    public static String sSortBy = "document_num";
-    public static String sSortType = "desc";
-    public static int sMemberNum = -1;
-    public static String sQuoryMode = "general";
+    private static int sLimitCount = 0;
+    private static String sKeyword = "";
+    private static String sKeywordType = "title";
+    private static String sSortBy = "document_num";
+    private static String sSortType = "desc";
+    private static int sMemberNum = -1;
+    private static String sQuoryMode = "general";
+
+    public static void setKeyword(String keyword) {
+        sKeyword = keyword;
+    }
 
     public static String getQuery() {
         String r = "limit_count=" + Integer.toString(sLimitCount)

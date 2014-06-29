@@ -89,7 +89,7 @@ public class Main extends Activity {
                 TextView tv = (TextView) findViewById(R.id.search);
                 String search = tv.getText().toString();
                 if (search.length() > 0) {
-                    BGMStoreQuery.sKeyword = search;
+                    BGMStoreQuery.setKeyword(search);
                     BGMStoreParser.parseBGMStoreList(h);
                 }
             }
@@ -110,7 +110,7 @@ public class Main extends Activity {
                     }
                 };
 
-                BGMStoreQuery.sKeyword = "";
+                BGMStoreQuery.setKeyword("");
                 BGMStoreParser.parseBGMStoreList(h);
             }
         });
