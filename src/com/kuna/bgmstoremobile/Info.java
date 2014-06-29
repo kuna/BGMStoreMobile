@@ -13,7 +13,7 @@ public class Info extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.listview);
+		setContentView(R.layout.infoview);
 		
 		TextView t = (TextView)findViewById(R.id.textView2);
 		t.setOnClickListener(new OnClickListener() {
