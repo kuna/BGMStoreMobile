@@ -48,8 +48,7 @@ public class StreamingMediaPlayer {
     private boolean downloaded;
     private boolean isLoop = false;
 
-    public StreamingMediaPlayer(Context context, Handler h)
-    {
+    public StreamingMediaPlayer(Context context, Handler h) {
         this.h = h;
         this.context = context;
 
@@ -105,8 +104,9 @@ public class StreamingMediaPlayer {
         // 캐시 영역에 파일 저장
         do {
             int numread = stream.read(buf);
-            if (numread <= 0)
+            if (numread <= 0) {
                 break;
+            }
             out.write(buf, 0, numread);
             totalBytesRead += numread;
             incrementalBytesRead += numread;
@@ -344,12 +344,12 @@ public class StreamingMediaPlayer {
 
     public void setLoop(boolean loop) {
         isLoop = loop;
-        if (mediaPlayer != null)
+        if (mediaPlayer != null) {
             mediaPlayer.setLooping(loop);
+        }
     }
 
-    public boolean downloadFileTo(String toPath)
-    {
+    public boolean downloadFileTo(String toPath) {
         if (!downloaded) {
             return false;
         }

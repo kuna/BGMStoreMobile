@@ -21,8 +21,9 @@ import net.htmlparser.jericho.Source;
 public class BGMStoreParser {
     private static boolean isRandomSongParsing = false;
     public static void getRandomSong(final Handler h) {
-        if (isRandomSongParsing)
+        if (isRandomSongParsing) {
             return;
+        }
 
         Thread t = new Thread(new Runnable() {
             @Override
@@ -39,8 +40,9 @@ public class BGMStoreParser {
                     List<Element> eles;
                     eles = source.getAllElements(HTMLElementName.DIV);
                     for (Element e: eles) {
-                        if (e.getAttributeValue("class") == null)
+                        if (e.getAttributeValue("class") == null) {
                             continue;
+                        }
                         if (e.getAttributeValue("class").indexOf("titleBox") >= 0) {
                             data.title = e.getTextExtractor().setIncludeAttributes(true).toString();
                             break;
@@ -49,8 +51,9 @@ public class BGMStoreParser {
 
                     eles = source.getAllElements(HTMLElementName.UL);
                     for (Element e: eles) {
-                        if (e.getAttributeValue("class") == null)
+                        if (e.getAttributeValue("class") == null) {
                             continue;
+                        }
                         if (e.getAttributeValue("class").equals("dropdown-menu")) {
                             data.url = e.getAllElements(HTMLElementName.A).get(1).getAttributeValue("href");
                             break;
@@ -71,8 +74,9 @@ public class BGMStoreParser {
 
     private static boolean isBMSListParsing = false;
     public static void parseBGMStoreList(final Handler h) {
-        if (isBMSListParsing)
+        if (isBMSListParsing) {
             return;
+        }
 
         Thread t = new Thread(new Runnable() {
             @Override
@@ -144,8 +148,9 @@ public class BGMStoreParser {
                             new InputStreamReader(conn.getInputStream()));
                     for (;;) {
                         String line = br.readLine();
-                        if (line == null)
+                        if (line == null) {
                             break;
+                        }
                         doc = doc + line + "\n";
                     }
                     br.close();
