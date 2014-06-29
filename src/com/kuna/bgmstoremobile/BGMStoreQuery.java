@@ -10,7 +10,7 @@ public class BGMStoreQuery {
 	public static String sort_type = "desc";
 	public static int member_num = -1;
 	public static String q_mode = "general";
-	
+
 	public static String getQuery() {
 		String r = "limit_count=" + Integer.toString(limit_count)
 				+ "&q=" + q

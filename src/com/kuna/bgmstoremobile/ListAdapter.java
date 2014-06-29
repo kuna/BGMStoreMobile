@@ -12,12 +12,12 @@ import android.widget.TextView;
 public class ListAdapter extends BaseAdapter {
 	List<SongData> lsd;
 	LayoutInflater inflater;
-	
+
 	public ListAdapter (Context c, List<SongData> lsd) {
 		this.lsd = lsd;
 		inflater = (LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
-	
+
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub

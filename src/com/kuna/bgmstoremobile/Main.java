@@ -32,7 +32,7 @@ import android.os.Build;
 
 public class Main extends Activity {
 	private StreamingMediaPlayer audioStreamer;
-	
+
 	private SongData ndata;
 	private Context c;
 	private List<SongData> lsd;
@@ -42,7 +42,7 @@ public class Main extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_main);
 		c = this;
-		
+
 		// set event handler
 		final ListView lv = (ListView)findViewById(R.id.listView1);
 		lv.setOnItemClickListener(new OnItemClickListener() {
@@ -55,7 +55,7 @@ public class Main extends Activity {
 				}
 			}
 		});
-		
+
 		Button b;
 		b = (Button)findViewById(R.id.btnrandom);
 		b.setOnClickListener(new OnClickListener() {
@@ -68,7 +68,7 @@ public class Main extends Activity {
 						Log.i("RANDOM", ndata.title);
 						Log.i("RANDOM", ndata.url);
 						PlayMusic(ndata.url);
-					
+
 						super.dispatchMessage(msg);
 					}
 				};
@@ -86,11 +86,11 @@ public class Main extends Activity {
 						lsd = (List<SongData>) msg.obj;
 						ListAdapter la = new ListAdapter(c, lsd);
 						lv.setAdapter(la);
-					
+
 						super.dispatchMessage(msg);
 					}
 				};
-				
+
 				TextView tv = (TextView)findViewById(R.id.search);
 				String search = tv.getText().toString();
 				if (search.length() > 0) {
@@ -110,27 +110,27 @@ public class Main extends Activity {
 						lsd = (List<SongData>) msg.obj;
 						ListAdapter la = new ListAdapter(c, lsd);
 						lv.setAdapter(la);
-					
+
 						super.dispatchMessage(msg);
 					}
 				};
-				
+
 				BGMStoreQuery.q = "";
 				BGMStoreParser.parseBGMStoreList(h);
 			}
 		});
 	}
-	
+
 	public void PlayMusic(String url) {
 		if (audioStreamer != null) {
 			audioStreamer.interrupt();
 		}
-		
+
 		final SeekBar seekbar = (SeekBar)findViewById(R.id.seekbar);
 		final TextView textStreamed = (TextView)findViewById(R.id.nowplaying);
 		final Button playButton = (Button)findViewById(R.id.button_play);
 		final Button downButton = (Button)findViewById(R.id.button_down);
-		
+
 		textStreamed.setText(ndata.title);
 		downButton.setEnabled(false);
 
@@ -141,28 +141,28 @@ public class Main extends Activity {
 				String mp3name = ndata.url.substring(ndata.url.indexOf("mp3/")+4);
 				mp3name = URLDecoder.decode(mp3name);
 				path += "/" + mp3name + ".mp3";
-				
+
 				audioStreamer.downloadFileTo(path);
 				Toast.makeText(c, "Downloaded to - " + path, Toast.LENGTH_LONG).show();
 			}
 		});
-		
+
 		seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {
 				audioStreamer.setSeek((double)seekBar.getProgress() / 100.0);
 			}
-			
+
 			@Override
 			public void onStartTrackingTouch(SeekBar seekBar) {
 			}
-			
+
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
 					boolean fromUser) {
 			}
 		});
-		
+
 		try {
 			Handler h = new Handler() {
 				@Override
@@ -177,12 +177,12 @@ public class Main extends Activity {
 						downButton.setEnabled(true);
 						break;
 					}
-					
-					
+
+
 					super.dispatchMessage(msg);
 				}
 			};
-			
+
 			audioStreamer = new StreamingMediaPlayer(this, h);
 			audioStreamer.startStreaming(url);
 			audioStreamer.setLoop(true);
@@ -223,7 +223,6 @@ public class Main extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {

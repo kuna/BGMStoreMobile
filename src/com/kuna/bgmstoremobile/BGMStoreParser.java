@@ -24,7 +24,7 @@ public class BGMStoreParser {
 	public static void getRandomSong(final Handler h) {
 		if (isRandomSongParsing)
 			return;
-		
+
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -36,7 +36,7 @@ public class BGMStoreParser {
 					Source source = new Source(new InputStreamReader(html, "utf-8"));
 
 					SongData data = new SongData();
-					
+
 					List<Element> eles;
 					eles = source.getAllElements(HTMLElementName.DIV);
 					for (Element e: eles) {
@@ -47,7 +47,7 @@ public class BGMStoreParser {
 							break;
 						}
 					}
-					
+
 					eles = source.getAllElements(HTMLElementName.UL);
 					for (Element e: eles) {
 						if (e.getAttributeValue("class") == null)
@@ -62,11 +62,11 @@ public class BGMStoreParser {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
+
 				isRandomSongParsing = false;
 			}
 		});
-		
+
 		t.start();
 	}
 
@@ -74,7 +74,7 @@ public class BGMStoreParser {
 	public static void parseBGMStoreList(final Handler h) {
 		if (isBMSListParsing)
 			return;
-		
+
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -82,13 +82,13 @@ public class BGMStoreParser {
 
 				try {
 					Source source = new Source(downloadBGMHTML());
-					
+
 					List<SongData> lsd = new ArrayList<SongData>();
-					
+
 					List<Element> eles = source.getAllElements(HTMLElementName.TR);
 					for (Element e: eles) {
 						SongData data = new SongData();
-						
+
 						List<Element> as = e.getAllElements(HTMLElementName.A);
 						for (Element e_: as) {
 							if (e_.getAttributeValue("class").equals("title")) {
@@ -96,26 +96,26 @@ public class BGMStoreParser {
 								break;
 							}
 						}
-						
+
 						data.url = e.getAllElements(HTMLElementName.UL).get(0)
 								.getAllElements(HTMLElementName.A).get(1)
 								.getAttributeValue("href");
-						
+
 						lsd.add(data);
 					}
-					
+
 					h.obtainMessage(0, lsd).sendToTarget();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
+
 				isBMSListParsing = false;
 			}
 		});
-		
+
 		t.start();
 	}
-	
+
 	public static String downloadBGMHTML() {
 		String doc = "";
 		try {
@@ -129,7 +129,7 @@ public class BGMStoreParser {
 				// optional default is GET
 				conn.setRequestMethod("POST");
 				conn.setDoOutput(true);
-		 
+
 				//add request header
 				conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36");
 				conn.setRequestProperty("X-Requested-With", "XMLHttpRequest");
@@ -138,7 +138,7 @@ public class BGMStoreParser {
 			    out_stream.write( BGMStoreQuery.getQuery().getBytes("UTF-8") );
 			    out_stream.flush();
 			    out_stream.close();
-				
+
 				if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
 					// 완성이됫다
 					BufferedReader br = new BufferedReader(
