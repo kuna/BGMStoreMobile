@@ -38,11 +38,11 @@ public class ListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		if (convertView == null) {
+		//if (convertView == null) {
 			convertView = inflater.inflate(R.layout.listview, parent, false);
 			TextView tv = (TextView)convertView.findViewById(R.id.txt);
 			tv.setText(lsd.get(position).title);
-		}
+		//}
 		return convertView;
 	}
 }
