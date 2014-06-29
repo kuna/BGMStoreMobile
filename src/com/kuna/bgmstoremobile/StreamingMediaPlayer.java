@@ -67,7 +67,7 @@ public class StreamingMediaPlayer {
     public void startStreaming(final String mediaUrl) throws IOException {
     	downloaded = false;
     	
-    	// ¾²·¹µå ½ÃÀÛ
+    	// ì“°ë ˆë“œ ì‹œì‘
 		Runnable r = new Runnable() {   
 	        public void run() {   
 	            try {   
@@ -87,7 +87,7 @@ public class StreamingMediaPlayer {
      */  
     public void downloadAudioIncrement(String mediaUrl) throws IOException {
     	
-    	// ÆÄÀÏ URL ÁÖ¼Ò·Î ºÎÅÍ ¿¬°á
+    	// íŒŒì¼ URL ì£¼ì†Œë¡œ ë¶€í„° ì—°ê²°
     	URLConnection cn = new URL(mediaUrl).openConnection();   
         cn.connect();   
         InputStream stream = cn.getInputStream();
@@ -95,19 +95,19 @@ public class StreamingMediaPlayer {
         	Log.e(getClass().getName(), "Unable to create InputStream for mediaUrl:" + mediaUrl);
         }
         
-        // Ä³½Ã Æú´õ ¸¸µé°í .datÆÄÀÏ »ı¼º
+        // ìºì‹œ í´ë” ë§Œë“¤ê³  .datíŒŒì¼ ìƒì„±
 		downloadingMediaFile = new File(context.getCacheDir(),"downloadingMedia.dat");
 
-		// °°Àº °æ·Î¿¡ ÆÄÀÏÀÌ Á¸Àç ÇÏ¸é ±× ÆÄÀÏ »èÁ¦ÇÔ.. Ä³½Ã¸Ş¸ğ¸® ¶§¹®
+		// ê°™ì€ ê²½ë¡œì— íŒŒì¼ì´ ì¡´ì¬ í•˜ë©´ ê·¸ íŒŒì¼ ì‚­ì œí•¨.. ìºì‹œë©”ëª¨ë¦¬ ë•Œë¬¸
 		if (downloadingMediaFile.exists()) {
 			downloadingMediaFile.delete();
 		}
 
-		// ´Ù½Ã ÆÄÀÏ »ı¼º
+		// ë‹¤ì‹œ íŒŒì¼ ìƒì„±
         FileOutputStream out = new FileOutputStream(downloadingMediaFile);   
         byte buf[] = new byte[16384];
         int totalBytesRead = 0, incrementalBytesRead = 0;
-        // Ä³½Ã ¿µ¿ª¿¡ ÆÄÀÏ ÀúÀå
+        // ìºì‹œ ì˜ì—­ì— íŒŒì¼ ì €ì¥
         do {
         	int numread = stream.read(buf);   
             if (numread <= 0)   
@@ -120,7 +120,7 @@ public class StreamingMediaPlayer {
             testMediaBuffer();
            	fireDataLoadUpdate();
         } while (validateNotInterrupted());
-        	// ÆÄÀÏ Àü¼ÛÀÌ ³¡³ª¸é Á¾·á
+        	// íŒŒì¼ ì „ì†¡ì´ ëë‚˜ë©´ ì¢…ë£Œ
        		stream.close();
         if (validateNotInterrupted()) {
 	       	fireDataFullyLoaded();
@@ -151,7 +151,7 @@ public class StreamingMediaPlayer {
 	            	//  Only create the MediaPlayer once we have the minimum buffered data
 	            	if ( totalKbRead >= INTIAL_KB_BUFFER) {
 	            		try {
-	            			// ¹ŞÀº ÆÄÀÏÀÇ Å©±â°¡ INTIAL_KB_BUFFER(120) ÀÌ»óÀÌ¸é À½¾ÇÆÄÀÏ Àç»ı
+	            			// ë°›ì€ íŒŒì¼ì˜ í¬ê¸°ê°€ INTIAL_KB_BUFFER(120) ì´ìƒì´ë©´ ìŒì•…íŒŒì¼ ì¬ìƒ
 		            		startMediaPlayer();
 	            		} catch (Exception e) {
 	            			Log.e(getClass().getName(), "Error copying buffered conent.", e);    			
@@ -161,7 +161,7 @@ public class StreamingMediaPlayer {
 	            	//  NOTE:  The media player has stopped at the end so transfer any existing buffered data
 	            	//  We test for < 1second of data because the media player can stop when there is still
 	            	//  a few milliseconds of data left to play
-	            	// À½¾Ç ÆÄÀÏÀ» ¹Ş´Ù°¡ ²÷¾îÁö¸é À½¾Ç Àç»ıÀ» ¸ØÃá´Ù
+	            	// ìŒì•… íŒŒì¼ì„ ë°›ë‹¤ê°€ ëŠì–´ì§€ë©´ ìŒì•… ì¬ìƒì„ ë©ˆì¶˜ë‹¤
 	            	transferBufferToMediaPlayer();
 	            }
 	        }
@@ -185,7 +185,7 @@ public class StreamingMediaPlayer {
         	Log.e(getClass().getName(),"Buffered File length: " + bufferedFile.length()+"");
         	
         	mediaPlayer = createMediaPlayer(bufferedFile);
-        	// À½¾Ç ÆÄÀÏ »ı¼º ÈÄ Àç»ı
+        	// ìŒì•… íŒŒì¼ ìƒì„± í›„ ì¬ìƒ
     		// We have pre-loaded enough content and started the MediaPlayer so update the buttons & progress meters.
 	    	mediaPlayer.start();
 	    	startPlayProgressUpdater();        	

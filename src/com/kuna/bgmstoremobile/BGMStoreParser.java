@@ -140,7 +140,7 @@ public class BGMStoreParser {
 			    out_stream.close();
 				
 				if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-					// �ϼ��̵̴�
+					// 완성이됫다
 					BufferedReader br = new BufferedReader(
 							new InputStreamReader(conn.getInputStream()));
 					for (;;) {

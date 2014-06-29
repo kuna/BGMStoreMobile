@@ -227,8 +227,8 @@ public class Main extends Activity {
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
-		if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) { // ¼¼·Î ÀüÈ¯½Ã ¹ß»ı
-		} else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) { // °¡·Î ÀüÈ¯½Ã ¹ß»ı
+		if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) { // ì„¸ë¡œ ì „í™˜ì‹œ ë°œìƒ
+		} else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) { // ê°€ë¡œ ì „í™˜ì‹œ ë°œìƒ
 		}
 		//super.onConfigurationChanged(newConfig);
 	}
