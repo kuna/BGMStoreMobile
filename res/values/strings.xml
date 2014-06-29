@@ -2,5 +2,6 @@
 <resources>
 
     <string name="app_name">BGMStoreMobile</string>
+    <string name="github_link"><a href="https://github.com/kuna/BGMStoreMobile">Github</a></string>
 
 </resources>
