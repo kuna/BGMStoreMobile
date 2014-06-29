@@ -10,17 +10,17 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 public class Info extends Activity {
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.infoview);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.infoview);
 
-		TextView t = (TextView)findViewById(R.id.textView2);
-		t.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/kuna/BGMStoreMobile")));
-			}
-		});
-	}
+        TextView t = (TextView)findViewById(R.id.textView2);
+        t.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/kuna/BGMStoreMobile")));
+            }
+        });
+    }
 }
