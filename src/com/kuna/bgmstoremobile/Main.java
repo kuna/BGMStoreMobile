@@ -26,17 +26,17 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 public class Main extends Activity {
-    private StreamingMediaPlayer audioStreamer;
+    private StreamingMediaPlayer mAudioStreamer;
 
-    private SongData ndata;
-    private Context c;
-    private List<SongData> lsd;
+    private SongData mSongData;
+    private Context mContext;
+    private List<SongData> mSongDataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_main);
-        c = this;
+        mContext = this;
 
         // set event handler
         final ListView lv = (ListView) findViewById(R.id.listView1);
@@ -44,9 +44,9 @@ public class Main extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                     int position, long id) {
-                if (lsd != null) {
-                    ndata = lsd.get(position);
-                    PlayMusic(ndata.url);
+                if (mSongDataList != null) {
+                    mSongData = mSongDataList.get(position);
+                    playMusic(mSongData.url);
                 }
             }
         });
@@ -59,10 +59,10 @@ public class Main extends Activity {
                 Handler h = new Handler() {
                     @Override
                     public void dispatchMessage(Message msg) {
-                        ndata = (SongData) msg.obj;
-                        Log.i("RANDOM", ndata.title);
-                        Log.i("RANDOM", ndata.url);
-                        PlayMusic(ndata.url);
+                        mSongData = (SongData) msg.obj;
+                        Log.i("RANDOM", mSongData.title);
+                        Log.i("RANDOM", mSongData.url);
+                        playMusic(mSongData.url);
 
                         super.dispatchMessage(msg);
                     }
@@ -78,8 +78,8 @@ public class Main extends Activity {
                 Handler h = new Handler() {
                     @Override
                     public void dispatchMessage(Message msg) {
-                        lsd = (List<SongData>) msg.obj;
-                        ListAdapter la = new ListAdapter(c, lsd);
+                        mSongDataList = (List<SongData>) msg.obj;
+                        ListAdapter la = new ListAdapter(mContext, mSongDataList);
                         lv.setAdapter(la);
 
                         super.dispatchMessage(msg);
@@ -89,7 +89,7 @@ public class Main extends Activity {
                 TextView tv = (TextView) findViewById(R.id.search);
                 String search = tv.getText().toString();
                 if (search.length() > 0) {
-                    BGMStoreQuery.q = search;
+                    BGMStoreQuery.sKeyword = search;
                     BGMStoreParser.parseBGMStoreList(h);
                 }
             }
@@ -102,23 +102,23 @@ public class Main extends Activity {
                 Handler h = new Handler() {
                     @Override
                     public void dispatchMessage(Message msg) {
-                        lsd = (List<SongData>) msg.obj;
-                        ListAdapter la = new ListAdapter(c, lsd);
+                        mSongDataList = (List<SongData>) msg.obj;
+                        ListAdapter la = new ListAdapter(mContext, mSongDataList);
                         lv.setAdapter(la);
 
                         super.dispatchMessage(msg);
                     }
                 };
 
-                BGMStoreQuery.q = "";
+                BGMStoreQuery.sKeyword = "";
                 BGMStoreParser.parseBGMStoreList(h);
             }
         });
     }
 
-    public void PlayMusic(String url) {
-        if (audioStreamer != null) {
-            audioStreamer.interrupt();
+    public void playMusic(String url) {
+        if (mAudioStreamer != null) {
+            mAudioStreamer.interrupt();
         }
 
         final SeekBar seekbar = (SeekBar) findViewById(R.id.seekbar);
@@ -126,26 +126,26 @@ public class Main extends Activity {
         final Button playButton = (Button) findViewById(R.id.button_play);
         final Button downButton = (Button) findViewById(R.id.button_down);
 
-        textStreamed.setText(ndata.title);
+        textStreamed.setText(mSongData.title);
         downButton.setEnabled(false);
 
         downButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
-                String mp3name = ndata.url.substring(ndata.url.indexOf("mp3/") + 4);
+                String mp3name = mSongData.url.substring(mSongData.url.indexOf("mp3/") + 4);
                 mp3name = URLDecoder.decode(mp3name);
                 path += "/" + mp3name + ".mp3";
 
-                audioStreamer.downloadFileTo(path);
-                Toast.makeText(c, "Downloaded to - " + path, Toast.LENGTH_LONG).show();
+                mAudioStreamer.downloadFileTo(path);
+                Toast.makeText(mContext, "Downloaded to - " + path, Toast.LENGTH_LONG).show();
             }
         });
 
         seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                audioStreamer.setSeek((double) seekBar.getProgress() / 100.0);
+                mAudioStreamer.setSeek((double) seekBar.getProgress() / 100.0);
             }
 
             @Override
@@ -177,18 +177,18 @@ public class Main extends Activity {
                 }
             };
 
-            audioStreamer = new StreamingMediaPlayer(this, h);
-            audioStreamer.startStreaming(url);
-            audioStreamer.setLoop(true);
+            mAudioStreamer = new StreamingMediaPlayer(this, h);
+            mAudioStreamer.startStreaming(url);
+            mAudioStreamer.setLoop(true);
 
             playButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    if (audioStreamer.getMediaPlayer().isPlaying()) {
-                        audioStreamer.getMediaPlayer().pause();
+                    if (mAudioStreamer.getMediaPlayer().isPlaying()) {
+                        mAudioStreamer.getMediaPlayer().pause();
                         //playButton.setImageResource(R.drawable.button_play);
                     } else {
-                        audioStreamer.getMediaPlayer().start();
-                        audioStreamer.startPlayProgressUpdater();
+                        mAudioStreamer.getMediaPlayer().start();
+                        mAudioStreamer.startPlayProgressUpdater();
                         //playButton.setImageResource(R.drawable.button_pause);
                     }
             }});

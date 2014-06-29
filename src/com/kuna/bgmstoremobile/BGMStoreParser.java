@@ -19,16 +19,16 @@ import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
 
 public class BGMStoreParser {
-    private static boolean isRandomSongParsing = false;
+    private static boolean mRandomSongParsing = false;
     public static void getRandomSong(final Handler h) {
-        if (isRandomSongParsing) {
+        if (mRandomSongParsing) {
             return;
         }
 
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                isRandomSongParsing = true;
+                mRandomSongParsing = true;
 
                 try {
                     URL nURL = new URL("http://bgmstore.net/random");
@@ -65,23 +65,23 @@ public class BGMStoreParser {
                     e.printStackTrace();
                 }
 
-                isRandomSongParsing = false;
+                mRandomSongParsing = false;
             }
         });
 
         t.start();
     }
 
-    private static boolean isBMSListParsing = false;
+    private static boolean mBMSListParsing = false;
     public static void parseBGMStoreList(final Handler h) {
-        if (isBMSListParsing) {
+        if (mBMSListParsing) {
             return;
         }
 
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                isBMSListParsing = true;
+                mBMSListParsing = true;
 
                 try {
                     Source source = new Source(downloadBGMHTML());
@@ -112,7 +112,7 @@ public class BGMStoreParser {
                     e.printStackTrace();
                 }
 
-                isBMSListParsing = false;
+                mBMSListParsing = false;
             }
         });
 

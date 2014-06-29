@@ -1,22 +1,22 @@
 package com.kuna.bgmstoremobile;
 
 public class BGMStoreQuery {
-    public static int limit_count = 0;
-    public static String q = "";
-    public static String q_type = "title";
-    public static String sort_by = "document_num";
-    public static String sort_type = "desc";
-    public static int member_num = -1;
-    public static String q_mode = "general";
+    public static int sLimitCount = 0;
+    public static String sKeyword = "";
+    public static String sKeywordType = "title";
+    public static String sSortBy = "document_num";
+    public static String sSortType = "desc";
+    public static int sMemberNum = -1;
+    public static String sQuoryMode = "general";
 
     public static String getQuery() {
-        String r = "limit_count=" + Integer.toString(limit_count)
-                + "&q=" + q
-                + "&q_type=" + q_type
-                + "&sort_by=" + sort_by
-                + "&sort_type=" + sort_type
-                + "&member_num=" + ((member_num >= 0) ? Integer.toString(member_num) : "")
-                + "&q_mode=" + q_mode;
+        String r = "limit_count=" + Integer.toString(sLimitCount)
+                + "&q=" + sKeyword
+                + "&q_type=" + sKeywordType
+                + "&sort_by=" + sSortBy
+                + "&sort_type=" + sSortType
+                + "&member_num=" + ((sMemberNum >= 0) ? Integer.toString(sMemberNum) : "")
+                + "&q_mode=" + sQuoryMode;
         return r; //URLEncoder.encode(r);
     }
 }
