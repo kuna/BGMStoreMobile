@@ -1,7 +1,5 @@
 package com.kuna.bgmstoremobile;
 
-import java.net.URLEncoder;
-
 public class BGMStoreQuery {
     public static int limit_count = 0;
     public static String q = "";

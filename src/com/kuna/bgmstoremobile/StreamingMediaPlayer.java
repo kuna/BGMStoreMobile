@@ -12,14 +12,9 @@ import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 
 import android.content.Context;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 /**
  * MediaPlayer does not yet support streaming from external URLs so this class provides a pseudo-streaming function

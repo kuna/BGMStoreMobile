@@ -3,7 +3,6 @@ package com.kuna.bgmstoremobile;
 import java.net.URLDecoder;
 import java.util.List;
 
-import android.support.v4.app.Fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,22 +12,18 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Toast;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import android.os.Build;
 
 public class Main extends Activity {
     private StreamingMediaPlayer audioStreamer;

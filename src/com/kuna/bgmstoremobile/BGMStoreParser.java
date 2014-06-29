@@ -14,7 +14,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import android.os.Handler;
-import android.util.Log;
 import net.htmlparser.jericho.Element;
 import net.htmlparser.jericho.HTMLElementName;
 import net.htmlparser.jericho.Source;
