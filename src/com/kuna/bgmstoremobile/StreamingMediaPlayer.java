@@ -32,11 +32,11 @@ public class StreamingMediaPlayer {
     public static final int MSG_DOWNLOADED = 4;
     public static final int MSG_INTERRUPTED = 5;
 
-    private static final int INTIAL_KB_BUFFER =  96*10/8;//assume 96kbps*10secs/8bits per byte
+    private static final int INTIAL_KB_BUFFER = 96*10/8;//assume 96kbps*10secs/8bits per byte
 
     private Handler h;
 
-    //  Track for display by progressBar
+    // Track for display by progressBar
     private int totalKbRead = 0;
 
     // Create Handler to call View updates on the main UI thread.
@@ -49,11 +49,11 @@ public class StreamingMediaPlayer {
     private Context context;
     private int counter = 0;
 
-    private int mediaLengthInSeconds;	// (milisecond) we dont know the value, so we should find it
+    private int mediaLengthInSeconds; // (milisecond) we dont know the value, so we should find it
     private boolean downloaded;
     private boolean isLoop = false;
 
-    public StreamingMediaPlayer(Context  context, Handler h)
+    public StreamingMediaPlayer(Context context, Handler h)
     {
         this.h = h;
         this.context = context;
@@ -143,11 +143,11 @@ public class StreamingMediaPlayer {
      * Test whether we need to transfer buffered data to the MediaPlayer.
      * Interacting with MediaPlayer on non-main UI thread can causes crashes to so perform this using a Handler.
      */
-    private void  testMediaBuffer() {
+    private void testMediaBuffer() {
         Runnable updater = new Runnable() {
             public void run() {
                 if (mediaPlayer == null) {
-                    //  Only create the MediaPlayer once we have the minimum buffered data
+                    // Only create the MediaPlayer once we have the minimum buffered data
                     if ( totalKbRead >= INTIAL_KB_BUFFER) {
                         try {
                             // 받은 파일의 크기가 INTIAL_KB_BUFFER(120) 이상이면 음악파일 재생
@@ -157,9 +157,9 @@ public class StreamingMediaPlayer {
                         }
                     }
                 } else if ( mediaPlayer.getDuration() - mediaPlayer.getCurrentPosition() <= 1000 ){
-                    //  NOTE:  The media player has stopped at the end so transfer any existing buffered data
-                    //  We test for < 1second of data because the media player can stop when there is still
-                    //  a few milliseconds of data left to play
+                    // NOTE: The media player has stopped at the end so transfer any existing buffered data
+                    // We test for < 1second of data because the media player can stop when there is still
+                    // a few milliseconds of data left to play
                     // 음악 파일을 받다가 끊어지면 음악 재생을 멈춘다
                     transferBufferToMediaPlayer();
                 }
@@ -175,7 +175,7 @@ public class StreamingMediaPlayer {
             // We double buffer the data to avoid potential read/write errors that could happen if the
             // download thread attempted to write at the same time the MediaPlayer was trying to read.
             // For example, we can't guarantee that the MediaPlayer won't open a file for playing and leave it locked while
-            // the media is playing.  This would permanently deadlock the file download.  To avoid such a deadloack,
+            // the media is playing. This would permanently deadlock the file download. To avoid such a deadloack,
             // we move the currently loaded data to a temporary buffer file that we start playing while the remaining
             // data downloads.
             moveFile(downloadingMediaFile,bufferedFile);
@@ -207,9 +207,9 @@ public class StreamingMediaPlayer {
                     }
                 });
 
-        //  It appears that for security/permission reasons, it is better to pass a FileDescriptor rather than a direct path to the File.
-        //  Also I have seen errors such as "PVMFErrNotSupported" and "Prepare failed.: status=0x1" if a file path String is passed to
-        //  setDataSource().  So unless otherwise noted, we use a FileDescriptor here.
+        // It appears that for security/permission reasons, it is better to pass a FileDescriptor rather than a direct path to the File.
+        // Also I have seen errors such as "PVMFErrNotSupported" and "Prepare failed.: status=0x1" if a file path String is passed to
+        // setDataSource(). So unless otherwise noted, we use a FileDescriptor here.
         FileInputStream fis = new FileInputStream(mediaFile);
         mPlayer.setDataSource(fis.getFD());
         mPlayer.setLooping(isLoop);
@@ -228,16 +228,16 @@ public class StreamingMediaPlayer {
             boolean wasPlaying = mediaPlayer.isPlaying();
             int curPosition = mediaPlayer.getCurrentPosition();
 
-            // Copy the currently downloaded content to a new buffered File.  Store the old File for deleting later.
+            // Copy the currently downloaded content to a new buffered File. Store the old File for deleting later.
             File oldBufferedFile = new File(context.getCacheDir(),"playingMedia" + counter + ".dat");
             File bufferedFile = new File(context.getCacheDir(),"playingMedia" + (counter++) + ".dat");
 
-            //  This may be the last buffered File so ask that it be delete on exit.  If it's already deleted, then this won't mean anything.  If you want to
+            // This may be the last buffered File so ask that it be delete on exit. If it's already deleted, then this won't mean anything. If you want to
             // keep and track fully downloaded files for later use, write caching code and please send me a copy.
             bufferedFile.deleteOnExit();
             moveFile(downloadingMediaFile,bufferedFile);
 
-            // Pause the current player now as we are about to create and start a new one.  So far (Android v1.5),
+            // Pause the current player now as we are about to create and start a new one. So far (Android v1.5),
             // this always happens so quickly that the user never realized we've stopped the player and started a new one
             mediaPlayer.pause();
 
@@ -245,9 +245,9 @@ public class StreamingMediaPlayer {
             mediaPlayer = createMediaPlayer(bufferedFile);
             mediaPlayer.seekTo(curPosition);
 
-            //  Restart if at end of prior buffered content or mediaPlayer was previously playing.
-            //	NOTE:  We test for < 1second of data because the media player can stop when there is still
-            //  a few milliseconds of data left to play
+            // Restart if at end of prior buffered content or mediaPlayer was previously playing.
+            // NOTE: We test for < 1second of data because the media player can stop when there is still
+            // a few milliseconds of data left to play
             boolean atEndOfFile = mediaPlayer.getDuration() - mediaPlayer.getCurrentPosition() <= 1000;
             if (wasPlaying || atEndOfFile){
                 mediaPlayer.start();
@@ -312,18 +312,18 @@ public class StreamingMediaPlayer {
     }
 
     /**
-     *  Move the file in oldLocation to newLocation.
+     * Move the file in oldLocation to newLocation.
      */
-    public void moveFile(File	oldLocation, File	newLocation)
+    public void moveFile(File oldLocation, File newLocation)
             throws IOException {
 
         if ( oldLocation.exists( )) {
-            BufferedInputStream  reader = new BufferedInputStream( new FileInputStream(oldLocation) );
-            BufferedOutputStream  writer = new BufferedOutputStream( new FileOutputStream(newLocation, false));
+            BufferedInputStream reader = new BufferedInputStream( new FileInputStream(oldLocation) );
+            BufferedOutputStream writer = new BufferedOutputStream( new FileOutputStream(newLocation, false));
             try {
-                byte[]  buff = new byte[8192];
+                byte[] buff = new byte[8192];
                 int numChars;
-                while ( (numChars = reader.read(  buff, 0, buff.length ) ) != -1) {
+                while ( (numChars = reader.read( buff, 0, buff.length ) ) != -1) {
                     writer.write( buff, 0, numChars );
                 }
             } catch( IOException ex ) {
