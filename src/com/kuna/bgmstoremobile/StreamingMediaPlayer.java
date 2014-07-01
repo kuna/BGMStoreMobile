@@ -13,6 +13,7 @@ import java.nio.channels.FileChannel;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Handler;
 import android.util.Log;
 
@@ -26,6 +27,7 @@ public class StreamingMediaPlayer {
     public static final int MSG_PLAYING = 3;
     public static final int MSG_DOWNLOADED = 4;
     public static final int MSG_INTERRUPTED = 5;
+    public static final int MSG_COMPLETED = 6;
 
     private static final int INTIAL_KB_BUFFER = 96 * 10 / 8; // assume 96kbps * 10secs / 8bits per byte
 
@@ -61,7 +63,7 @@ public class StreamingMediaPlayer {
     public void startStreaming(final String mediaUrl) throws IOException {
         mDownloaded = false;
 
-        // 쓰레드 시작
+        // �곕젅���쒖옉
         Runnable r = new Runnable() {
             public void run() {
                 try {
@@ -81,7 +83,7 @@ public class StreamingMediaPlayer {
      */
     public void downloadAudioIncrement(String mediaUrl) throws IOException {
 
-        // 파일 URL 주소로 부터 연결
+        // �뚯씪 URL 二쇱냼濡�遺�꽣 �곌껐
         URLConnection cn = new URL(mediaUrl).openConnection();
         cn.connect();
         InputStream stream = cn.getInputStream();
@@ -89,19 +91,19 @@ public class StreamingMediaPlayer {
             Log.e(getClass().getName(), "Unable to create InputStream for mediaUrl:" + mediaUrl);
         }
 
-        // 캐시 폴더 만들고 .dat파일 생성
+        // 罹먯떆 �대뜑 留뚮뱾怨�.dat�뚯씪 �앹꽦
         mDownloadingMediaFile = new File(mContext.getCacheDir(), "downloadingMedia.dat");
 
-        // 같은 경로에 파일이 존재 하면 그 파일 삭제함.. 캐시메모리 때문
+        // 媛숈� 寃쎈줈���뚯씪��議댁옱 �섎㈃ 洹��뚯씪 ��젣��. 罹먯떆硫붾え由��뚮Ц
         if (mDownloadingMediaFile.exists()) {
             mDownloadingMediaFile.delete();
         }
 
-        // 다시 파일 생성
+        // �ㅼ떆 �뚯씪 �앹꽦
         FileOutputStream out = new FileOutputStream(mDownloadingMediaFile);
         byte buf[] = new byte[16384];
         int totalBytesRead = 0, incrementalBytesRead = 0;
-        // 캐시 영역에 파일 저장
+        // 罹먯떆 �곸뿭���뚯씪 ��옣
         do {
             int numread = stream.read(buf);
             if (numread <= 0) {
@@ -115,7 +117,7 @@ public class StreamingMediaPlayer {
             testMediaBuffer();
             fireDataLoadUpdate();
         } while (validateNotInterrupted());
-        // 파일 전송이 끝나면 종료
+        // �뚯씪 �꾩넚���앸굹硫�醫낅즺
         stream.close();
         if (validateNotInterrupted()) {
             fireDataFullyLoaded();
@@ -145,7 +147,7 @@ public class StreamingMediaPlayer {
                     // Only create the MediaPlayer once we have the minimum buffered data
                     if ( mTotalKbRead >= INTIAL_KB_BUFFER) {
                         try {
-                            // 받은 파일의 크기가 INTIAL_KB_BUFFER(120) 이상이면 음악파일 재생
+                            // 諛쏆� �뚯씪���ш린媛�INTIAL_KB_BUFFER(120) �댁긽�대㈃ �뚯븙�뚯씪 �ъ깮
                             startMediaPlayer();
                         } catch (Exception e) {
                             Log.e(getClass().getName(), "Error copying buffered conent.", e);
@@ -155,7 +157,7 @@ public class StreamingMediaPlayer {
                     // NOTE: The media player has stopped at the end so transfer any existing buffered data
                     // We test for < 1second of data because the media player can stop when there is still
                     // a few milliseconds of data left to play
-                    // 음악 파일을 받다가 끊어지면 음악 재생을 멈춘다
+                    // �뚯븙 �뚯씪��諛쏅떎媛��딆뼱吏�㈃ �뚯븙 �ъ깮��硫덉텣��
                     transferBufferToMediaPlayer();
                 }
             }
@@ -179,7 +181,7 @@ public class StreamingMediaPlayer {
             Log.e(getClass().getName(), "Buffered File length: " + bufferedFile.length() + "");
 
             mMediaPlayer = createMediaPlayer(bufferedFile);
-            // 음악 파일 생성 후 재생
+            // �뚯븙 �뚯씪 �앹꽦 ���ъ깮
             // We have pre-loaded enough content and started the MediaPlayer so update the buttons & progress meters.
             mMediaPlayer.start();
             startPlayProgressUpdater();
@@ -207,7 +209,20 @@ public class StreamingMediaPlayer {
         // setDataSource(). So unless otherwise noted, we use a FileDescriptor here.
         FileInputStream fis = new FileInputStream(mediaFile);
         mPlayer.setDataSource(fis.getFD());
-        mPlayer.setLooping(mLooping);
+        if (mDownloaded) {
+        	// loop default value: false
+        	mPlayer.setLooping(mLooping);
+        	
+        	// make event handler for onCompleteion
+        	if (!mLooping) {
+        		mPlayer.setOnCompletionListener(new OnCompletionListener() {
+					@Override
+					public void onCompletion(MediaPlayer mp) {
+						mPlayerHandler.obtainMessage(MSG_COMPLETED).sendToTarget();
+					}
+				});
+        	}
+        }
         mPlayer.prepare();
         return mPlayer;
     }
@@ -268,11 +283,11 @@ public class StreamingMediaPlayer {
     private void fireDataFullyLoaded() {
         Runnable updater = new Runnable() {
             public void run() {
+                mDownloaded = true;
                 transferBufferToMediaPlayer();
 
                 // Delete the downloaded File as it's now been transferred to the currently playing buffer file.
                 //mDownloadingMediaFile.delete(); <- we'll provide it for downloading
-                mDownloaded = true;
                 mPlayerHandler.obtainMessage(MSG_DOWNLOADED).sendToTarget();
                 Log.i("StreamingMediaPlayer", "Audio full loaded: " + Integer.toString(mTotalKbRead) + " Kb read");
             }

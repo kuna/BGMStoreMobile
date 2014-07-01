@@ -12,6 +12,14 @@ public class BGMStoreQuery {
     public static void setKeyword(String keyword) {
         sKeyword = keyword;
     }
+    
+    public static int getLimitCount() {
+    	return sLimitCount;
+    }
+    
+    public static void setLimitCount(int cnt) {
+        sLimitCount = cnt;
+    }
 
     public static String getQuery() {
         return "limit_count=" + Integer.toString(sLimitCount)

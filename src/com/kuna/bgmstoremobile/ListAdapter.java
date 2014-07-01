@@ -17,6 +17,10 @@ public class ListAdapter extends BaseAdapter {
         mSongDataList = songDataList;
         mInflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
+    
+    public void setData(List<SongData> data) {
+    	mSongDataList = data;
+    }
 
     @Override
     public int getCount() {

@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.kuna.bgmstoremobile.Main" >
 
-    <item
+    <item android:id="@+id/plugout" android:title="Stop when plugged out" android:checkable="true"></item><item android:id="@+id/random" android:title="Infinte Random Play"></item><item
         android:id="@+id/info"
         android:orderInCategory="100"
         android:title="Info" />
+    
+    
 
 </menu>
